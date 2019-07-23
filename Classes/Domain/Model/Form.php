@@ -9,6 +9,7 @@ use In2code\Powermail\Utility\StringUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use In2code\Powermail\Utility\CsrfUtility;
 
 /**
  * Class Form
@@ -46,6 +47,11 @@ class Form extends AbstractEntity
      * @var array
      */
     protected $pagesByUid = [];
+
+	/**
+	 * @var string
+	 */
+	protected $csrfToken;
 
     /**
      * Returns the title
@@ -218,4 +224,24 @@ class Form extends AbstractEntity
         }
         return false;
     }
+
+	/**
+	 *
+	 * @return type
+	 */
+	function getCsrfToken() {
+		if(!$this->csrfToken) {
+			$this->csrfToken = CsrfUtility::createAndStoreToken($this->uid);
+		}
+
+		return $this->csrfToken;
+	}
+
+	/**
+	 *
+	 * @param type $csrfToken
+	 */
+	function setCsrfToken($csrfToken) {
+		$this->csrfToken = $csrfToken;
+	}
 }

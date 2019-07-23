@@ -86,6 +86,7 @@ class FormController extends AbstractController
      * @validate $mail In2code\Powermail\Domain\Validator\UniqueValidator
      * @validate $mail In2code\Powermail\Domain\Validator\ForeignValidator
      * @validate $mail In2code\Powermail\Domain\Validator\CustomValidator
+     * @validate $mail In2code\Powermail\Domain\Validator\CsrfTokenValidator
      * @return void
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
@@ -161,6 +162,7 @@ class FormController extends AbstractController
      * @validate $mail In2code\Powermail\Domain\Validator\UniqueValidator
      * @validate $mail In2code\Powermail\Domain\Validator\ForeignValidator
      * @validate $mail In2code\Powermail\Domain\Validator\CustomValidator
+     * @validate $mail In2code\Powermail\Domain\Validator\CsrfTokenValidator
      * @return void
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -338,6 +340,12 @@ class FormController extends AbstractController
             $this->controllerContext = $this->buildControllerContext();
             $this->addFlashMessage(LocalizationUtility::translate('error_no_typoscript'), '', AbstractMessage::ERROR);
         }
+
+	    if($this->arguments->hasArgument('mail')) {
+		    $mailArgument = $this->arguments->getArgument('mail');
+		    $propertyMappingConfiguration = $mailArgument->getPropertyMappingConfiguration();
+		    $propertyMappingConfiguration->allowProperties('csrfToken');
+	    }
     }
 
     /**

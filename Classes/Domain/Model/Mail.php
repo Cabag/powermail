@@ -138,6 +138,11 @@ class Mail extends AbstractEntity
      */
     protected $answersByFieldUid = null;
 
+	/**
+	 * @var string
+	 */
+	protected $csrfToken;
+
     /**
      * __construct
      */
@@ -714,4 +719,22 @@ class Mail extends AbstractEntity
         }
         return $answers;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getCsrfToken()
+	{
+		return $this->csrfToken;
+	}
+
+	/**
+	 * @param string $csrfToken
+	 */
+	public function setCsrfToken($csrfToken)
+	{
+		$this->csrfToken = $csrfToken;
+	}
+
+
 }

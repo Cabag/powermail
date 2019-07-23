@@ -48,6 +48,7 @@ Show Confirmation Page
 					addQueryString="{settings.misc.addQueryString}"
 					additionalAttributes="{vh:Validation.EnableParsleyAndAjax(form: mail.form)}">
 				<f:render section="HiddenFields" arguments="{_all}" />
+				<f:render partial="Form/CsrfToken" arguments="{token: mail.csrfToken}" />
 				<f:form.submit
 						value="{f:translate(key: 'confirmation_next')}"
 						additionalAttributes="{data-powermail-form-ajax:'submit'}"
