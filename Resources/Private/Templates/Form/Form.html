@@ -34,6 +34,7 @@ Render Powermail Form
 					</f:for>
 
 					<f:form.hidden name="mail[form]" value="{form.uid}" class="powermail_form_uid" />
+					<f:render partial="Form/FormToken" arguments="{formToken:formToken}" />
 					<f:render partial="Misc/HoneyPod" arguments="{form:form}" />
 				</f:form>
 			</div>

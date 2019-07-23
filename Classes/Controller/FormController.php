@@ -4,6 +4,7 @@ namespace In2code\Powermail\Controller;
 
 use In2code\Powermail\DataProcessor\DataProcessorRunner;
 use In2code\Powermail\Domain\Factory\MailFactory;
+use In2code\Powermail\Domain\Model\Form;
 use In2code\Powermail\Domain\Model\Mail;
 use In2code\Powermail\Domain\Service\ConfigurationService;
 use In2code\Powermail\Domain\Service\Mail\SendOptinConfirmationMailPreflight;
@@ -56,9 +57,11 @@ class FormController extends AbstractController
                 'form' => $form,
                 'ttContentData' => $this->contentObject->data,
                 'messageClass' => $this->messageClass,
-                'action' => ($this->settings['main']['confirmation'] ? 'confirmation' : 'create')
+                'action' => ($this->settings['main']['confirmation'] ? 'confirmation' : 'create'),
+	            'formToken' => $this->generateToken($form),
             ]
         );
+        $this->persistTokens();
     }
 
     /**
@@ -86,6 +89,7 @@ class FormController extends AbstractController
      * @validate $mail In2code\Powermail\Domain\Validator\UniqueValidator
      * @validate $mail In2code\Powermail\Domain\Validator\ForeignValidator
      * @validate $mail In2code\Powermail\Domain\Validator\CustomValidator
+     * @validate $mail In2code\Powermail\Domain\Validator\FormTokenValidator
      * @return void
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
@@ -474,5 +478,22 @@ class FormController extends AbstractController
     public function injectPersistenceManager(PersistenceManager $persistenceManager)
     {
         $this->persistenceManager = $persistenceManager;
+    }
+
+	/**
+	 * @param Form $form
+	 * @param string $action
+	 * @return string
+	 */
+    protected function generateToken($form) {
+	    return \TYPO3\CMS\Core\FormProtection\FormProtectionFactory::get()
+		    ->generateToken('Powermail', 'form', $form->getUid());
+    }
+
+	/**
+	 *
+	 */
+    protected function persistTokens() {
+    	\TYPO3\CMS\Core\FormProtection\FormProtectionFactory::get()->persistTokens();
     }
 }
